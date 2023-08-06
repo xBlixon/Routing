@@ -4,6 +4,7 @@ namespace Velsym\Routing;
 use ReflectionClass;
 use ReflectionMethod;
 use Velsym\Routing\Attributes\Route;
+use Velsym\Routing\Communication\Request;
 
 require_once "helpers.php";
 
@@ -11,11 +12,13 @@ class Router
 {
     private array $routes = [];
     private array $routeNameToPath = [];
+    private Request $request;
 
     public function __construct(
-        private string $absoluteRoutesPath,
-        private string $routesNamespace
+        private readonly string $absoluteRoutesPath,
+        private readonly string $routesNamespace
     ){
+        $this->request = Request::get();
         $dir = scandir($this->absoluteRoutesPath);
         array_shift($dir);
         array_shift($dir);
@@ -42,10 +45,14 @@ class Router
 
     private function registerRoute(ReflectionMethod $route): void
     {
+        if(!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0])
+        {
+            return;
+        }
         /**
          * @var Route $routeAttribute
          */
-        $routeAttribute = $route->getAttributes("Velsym\Routing\Attributes\Route")[0]->newInstance();
+        $routeAttribute = $routeAttribute->newInstance();
         $routeAttribute->setName($route->getName());
         $params = $routeAttribute->getParams();
         foreach ($params['methods'] as $method) {
@@ -59,8 +66,7 @@ class Router
 
     public function handle(): void
     {
-        $HTTP_METHOD = $_SERVER['REQUEST_METHOD'];
-        $handler = $this->routes[$HTTP_METHOD][$_SERVER['REQUEST_URI']] ?? NULL;
+        $handler = $this->routes[$this->request->method][$this->request->url->path] ?? NULL;
         if($handler)
         {
             $class = new $handler['class']();

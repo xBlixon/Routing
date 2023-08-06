@@ -2,8 +2,6 @@
 
 namespace Velsym\Routing\Communication;
 
-use function Velsym\Routing\preDump;
-
 readonly class UrlInfo
 {
     public string $path;
@@ -14,6 +12,6 @@ readonly class UrlInfo
         $url = parse_url($URI);
         $this->path = $url['path'];
         parse_str($url['query'], $parsedQuery);
-        $this->query = $parsedQuery ?? [];
+        $this->query = $parsedQuery;
     }
 }

@@ -5,8 +5,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use Velsym\Routing\Attributes\Route;
 use Velsym\Routing\Communication\Request;
-
-require_once "helpers.php";
+use Velsym\Routing\Communication\Response;
 
 class Router
 {
@@ -32,9 +31,7 @@ class Router
         }
     }
 
-    /**
-     * @param ReflectionMethod[] $routes
-     */
+    /** @param ReflectionMethod[] $routes */
     private function registerManyRoutes(array $routes): void
     {
         foreach ($routes as $route)
@@ -67,17 +64,23 @@ class Router
     public function handle(): void
     {
         $handler = $this->routes[$this->request->method][$this->request->url->path] ?? NULL;
-        if($handler)
-        {
-            $class = new $handler['class']();
-            $class->{$handler['name']}();
-        }
-        else
+        if(!$handler)
         {
             http_response_code(404);
             echo "No route matching url.";
             die;
         }
+        $class = new $handler['class']();
+        /** @var Response $response */
+        $response = $class->{$handler['name']}();
+
+        if(!$response)
+        {
+            echo "Response class wasn't returned from '{$handler['name']}' route.";
+        }
+        http_response_code($response->getResposeCode());
+        $this->useHeaders($response->getHeaders());
+        echo $response->getBody();
     }
 
     public function dumpRoutes(): void
@@ -85,5 +88,13 @@ class Router
         var_dump($this->routes);
         var_dump($this->routeNameToPath);
         exit;
+    }
+
+    public function useHeaders(array $headers): void
+    {
+        foreach ($headers as $header => $value)
+        {
+            header("$header $value");
+        }
     }
 }

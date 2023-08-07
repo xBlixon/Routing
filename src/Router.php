@@ -24,7 +24,7 @@ class Router
 
         foreach ($dir as $routeClass)
         {
-            $routeClass = str_replace(".php", "", $routeClass);
+            $routeClass = pathinfo($routeClass, PATHINFO_FILENAME);
             $reflectionClass = new ReflectionClass($this->routesNamespace . $routeClass);
             $routes = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
             $this->registerManyRoutes($routes);
@@ -46,9 +46,7 @@ class Router
         {
             return;
         }
-        /**
-         * @var Route $routeAttribute
-         */
+        /** @var Route $routeAttribute */
         $routeAttribute = $routeAttribute->newInstance();
         $routeAttribute->setName($route->getName());
         $params = $routeAttribute->getParams();
@@ -94,7 +92,7 @@ class Router
     {
         foreach ($headers as $header => $value)
         {
-            header("$header $value");
+            header("$header: $value");
         }
     }
 }

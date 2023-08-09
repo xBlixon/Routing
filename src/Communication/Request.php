@@ -16,8 +16,7 @@ class Request
 
     public static function get(): self
     {
-        if(self::$instance === NULL)
-        {
+        if (self::$instance === NULL) {
             self::$instance = new static();
         }
         return self::$instance;

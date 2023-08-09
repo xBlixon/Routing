@@ -1,6 +1,7 @@
 <?php
 
 namespace Velsym\Routing;
+
 use ReflectionClass;
 use ReflectionMethod;
 use Velsym\Routing\Attributes\Route;
@@ -16,14 +17,14 @@ class Router
     public function __construct(
         private readonly string $absoluteRoutesPath,
         private readonly string $routesNamespace
-    ){
+    )
+    {
         $this->request = Request::get();
         $dir = scandir($this->absoluteRoutesPath);
         array_shift($dir);
         array_shift($dir);
 
-        foreach ($dir as $routeClass)
-        {
+        foreach ($dir as $routeClass) {
             $routeClass = pathinfo($routeClass, PATHINFO_FILENAME);
             $reflectionClass = new ReflectionClass($this->routesNamespace . $routeClass);
             $routes = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
@@ -34,16 +35,14 @@ class Router
     /** @param ReflectionMethod[] $routes */
     private function registerManyRoutes(array $routes): void
     {
-        foreach ($routes as $route)
-        {
+        foreach ($routes as $route) {
             $this->registerRoute($route);
         }
     }
 
     private function registerRoute(ReflectionMethod $route): void
     {
-        if(!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0])
-        {
+        if (!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0]) {
             return;
         }
         /** @var Route $routeAttribute */
@@ -62,8 +61,7 @@ class Router
     public function handle(): void
     {
         $handler = $this->routes[$this->request->method][$this->request->url->path] ?? NULL;
-        if(!$handler)
-        {
+        if (!$handler) {
             http_response_code(404);
             echo "No route matching url.";
             die;
@@ -72,8 +70,7 @@ class Router
         /** @var Response $response */
         $response = $class->{$handler['name']}();
 
-        if(!$response)
-        {
+        if (!$response) {
             echo "Response class wasn't returned from '{$handler['name']}' route.";
         }
         http_response_code($response->getResposeCode());
@@ -90,8 +87,7 @@ class Router
 
     public function useHeaders(array $headers): void
     {
-        foreach ($headers as $header => $value)
-        {
+        foreach ($headers as $header => $value) {
             header("$header: $value");
         }
     }

@@ -8,6 +8,7 @@ use Attribute;
 class Route
 {
     private array $params;
+
     public function __construct(string $path, array $methods)
     {
         $this->params = [

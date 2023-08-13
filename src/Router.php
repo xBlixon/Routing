@@ -44,10 +44,10 @@ class Router
     private function registerRoute(ReflectionMethod $route): void
     {
         if (!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0] ?? NULL) return;
-        /** @var Route $routeAttribute */
-        $routeAttribute = $routeAttribute->newInstance();
-        $routeAttribute->setName($route->getName());
-        $params = $routeAttribute->getParams();
+        /** @var Route $routeAttributeObject */
+        $routeAttributeObject = $routeAttribute->newInstance();
+        $routeAttributeObject->setName($route->getName());
+        $params = $routeAttributeObject->getParams();
         foreach ($params['methods'] as $method) {
             $this->routes[$method][$params['path']] =
                 [

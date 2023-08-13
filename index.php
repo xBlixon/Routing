@@ -2,6 +2,7 @@
 use Velsym\Routing\Router;
 
 require "vendor/autoload.php";
+require "src/helpers.php";
 
 $router = new Router(__DIR__. "/test-routes", "Velsym\\TestRoutes\\");
 

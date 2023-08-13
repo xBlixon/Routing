@@ -11,7 +11,7 @@ readonly class UrlInfo
     {
         $url = parse_url($URI);
         $this->path = $url['path'];
-        parse_str($url['query'], $parsedQuery);
+        parse_str($url['query'] ?? "", $parsedQuery);
         $this->query = $parsedQuery;
     }
 }

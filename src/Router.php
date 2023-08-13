@@ -4,6 +4,7 @@ namespace Velsym\Routing;
 
 use ReflectionClass;
 use ReflectionMethod;
+use Velsym\DependencyInjection\DependencyManager;
 use Velsym\Routing\Attributes\Route;
 use Velsym\Routing\Communication\Request;
 use Velsym\Routing\Communication\Response;
@@ -42,18 +43,17 @@ class Router
 
     private function registerRoute(ReflectionMethod $route): void
     {
-        if (!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0]) {
-            return;
-        }
+        if (!$routeAttribute = $route->getAttributes("Velsym\\Routing\\Attributes\\Route")[0] ?? NULL) return;
         /** @var Route $routeAttribute */
         $routeAttribute = $routeAttribute->newInstance();
         $routeAttribute->setName($route->getName());
         $params = $routeAttribute->getParams();
         foreach ($params['methods'] as $method) {
-            $this->routes[$method][$params['path']] = [
-                'class' => $route->class,
-                'name' => $route->name
-            ];
+            $this->routes[$method][$params['path']] =
+                [
+                    'class' => $route->class,
+                    'name' => $route->name
+                ];
             $this->routeNameToPath[$params['name']] = $params['path'];
         }
     }
@@ -66,9 +66,11 @@ class Router
             echo "No route matching url.";
             die;
         }
-        $class = new $handler['class']();
+        /** @var RouteHelper $class */
+        $class = DependencyManager::resolveClassToInstance($handler['class']);
+        $class->_v_http_init();
         /** @var Response $response */
-        $response = $class->{$handler['name']}();
+        $response = DependencyManager::callMethodWithResolvedArguments($class, $handler['name']);
 
         if (!$response) {
             echo "Response class wasn't returned from '{$handler['name']}' route.";

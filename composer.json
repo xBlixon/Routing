@@ -16,6 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "velsym/dependency-injection": "dev-main"
     }
 }

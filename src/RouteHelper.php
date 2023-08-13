@@ -10,7 +10,7 @@ abstract class RouteHelper
     protected Request $request;
     protected Response $response;
 
-    public function __construct()
+    public function _v_http_init(): void
     {
         $this->request = Request::get();
         $this->response = new Response();

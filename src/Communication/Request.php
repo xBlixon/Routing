@@ -14,7 +14,7 @@ class Request
         $this->url = new UrlInfo($_SERVER['REQUEST_URI']);
     }
 
-    public static function get(): self
+    public static function getInstance(): self
     {
         if (self::$instance === NULL) {
             self::$instance = new static();

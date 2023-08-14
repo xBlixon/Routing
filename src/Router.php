@@ -20,7 +20,7 @@ class Router
         private readonly string $routesNamespace
     )
     {
-        $this->request = Request::get();
+        $this->request = Request::getInstance();
         $dir = scandir($this->absoluteRoutesPath);
         array_shift($dir);
         array_shift($dir);

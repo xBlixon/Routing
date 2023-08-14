@@ -12,7 +12,7 @@ abstract class RouteHelper
 
     public function _v_http_init(): void
     {
-        if($this->request === NULL) $this->request = Request::get();
+        if($this->request === NULL) $this->request = Request::getInstance();
         if($this->response === NULL) $this->response = new Response();
     }
 

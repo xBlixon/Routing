@@ -7,13 +7,13 @@ use Velsym\Routing\Communication\Response;
 
 abstract class RouteHelper
 {
-    protected Request $request;
-    protected Response $response;
+    protected ?Request $request = NULL;
+    protected ?Response $response = NULL;
 
     public function _v_http_init(): void
     {
-        $this->request = Request::get();
-        $this->response = new Response();
+        if($this->request === NULL) $this->request = Request::get();
+        if($this->response === NULL) $this->response = new Response();
     }
 
     protected function render(string $output): Response

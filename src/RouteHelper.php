@@ -2,17 +2,17 @@
 
 namespace Velsym\Routing;
 
-use Velsym\Routing\Communication\Request;
 use Velsym\Routing\Communication\Response;
+use Velsym\Routing\Communication\Session;
 
 abstract class RouteHelper
 {
-    protected ?Request $request = NULL;
     protected ?Response $response = NULL;
+    protected ?Session $session = NULL;
 
     public function _v_http_init(): void
     {
-        if($this->request === NULL) $this->request = Request::getInstance();
+        if($this->session === NULL) $this->session = Session::getInstance();
         if($this->response === NULL) $this->response = new Response();
     }
 

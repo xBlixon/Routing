@@ -4,21 +4,15 @@ namespace Velsym\Routing\Communication;
 
 class Request
 {
-    private static ?Request $instance = NULL;
-    public string $method;
-    public UrlInfo $url;
+    private function __construct(){}
 
-    private function __construct()
+    public static function method(): string
     {
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->url = new UrlInfo($_SERVER['REQUEST_URI']);
+        return $_SERVER['REQUEST_METHOD'];
     }
 
-    public static function getInstance(): self
+    public static function url(): UrlInfo
     {
-        if (self::$instance === NULL) {
-            self::$instance = new static();
-        }
-        return self::$instance;
+        return new UrlInfo($_SERVER['REQUEST_URI']);
     }
 }

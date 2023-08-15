@@ -13,14 +13,12 @@ class Router
 {
     private array $routes = [];
     private array $routeNameToPath = [];
-    private Request $request;
 
     public function __construct(
         private readonly string $absoluteRoutesPath,
         private readonly string $routesNamespace
     )
     {
-        $this->request = Request::getInstance();
         $dir = scandir($this->absoluteRoutesPath);
         array_shift($dir);
         array_shift($dir);
@@ -60,7 +58,7 @@ class Router
 
     public function handle(): void
     {
-        $handler = $this->routes[$this->request->method][$this->request->url->path] ?? NULL;
+        $handler = $this->routes[Request::method()][Request::url()->path] ?? NULL;
         if (!$handler) {
             http_response_code(404);
             echo "No route matching url.";

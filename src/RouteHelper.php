@@ -21,4 +21,14 @@ abstract class RouteHelper
         $this->response->setBody($output);
         return $this->response;
     }
+
+    protected function redirectToPath(string $path): Response
+    {
+        return $this->response->addHeader('Location', $path);
+    }
+
+    protected function redirectToRoute(string $routeName): Response
+    {
+        return $this->response->setRedirectRouteName($routeName);
+    }
 }

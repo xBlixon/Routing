@@ -7,6 +7,7 @@ class Response
     private array $headers = [];
     private int $resposeCode = 200;
     private string $body = "";
+    private ?string $redirectRouteName = NULL;
 
     public function addHeader(string $header, string $value): self
     {
@@ -43,5 +44,16 @@ class Response
     public function setResposeCode(int $resposeCode): void
     {
         $this->resposeCode = $resposeCode;
+    }
+
+    public function getRedirectRouteName(): ?string
+    {
+        return $this->redirectRouteName;
+    }
+
+    public function setRedirectRouteName(?string $redirectRouteName): self
+    {
+        $this->redirectRouteName = $redirectRouteName;
+        return $this;
     }
 }

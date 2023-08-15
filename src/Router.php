@@ -74,6 +74,11 @@ class Router
             echo "Response class wasn't returned from '{$handler['name']}' route.";
         }
         http_response_code($response->getResposeCode());
+        if($routeName = $response->getRedirectRouteName())
+        {
+            $routePath = $this->routeNameToPath[$routeName];
+            header("Location: $routePath");
+        }
         $this->useHeaders($response->getHeaders());
         echo $response->getBody();
     }

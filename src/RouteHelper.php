@@ -13,7 +13,7 @@ abstract class RouteHelper
     public function _v_http_init(): void
     {
         if($this->session === NULL) $this->session = Session::getInstance();
-        if($this->response === NULL) $this->response = new Response();
+        if($this->response === NULL) $this->response = Response::getInstance();
     }
 
     protected function render(string $output): Response

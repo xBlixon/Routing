@@ -4,10 +4,21 @@ namespace Velsym\Routing\Communication;
 
 class Response
 {
+    private static ?Response $instance = NULL;
     private array $headers = [];
     private int $resposeCode = 200;
     private string $body = "";
     private ?string $redirectRouteName = NULL;
+
+    private function __construct(){}
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new static();
+        }
+        return self::$instance;
+    }
 
     public function addHeader(string $header, string $value): self
     {

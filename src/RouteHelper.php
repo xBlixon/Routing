@@ -2,8 +2,8 @@
 
 namespace Velsym\Routing;
 
-use Velsym\Routing\Communication\Response;
-use Velsym\Routing\Communication\Session;
+use Velsym\Communication\Response;
+use Velsym\Communication\Session;
 
 abstract class RouteHelper
 {

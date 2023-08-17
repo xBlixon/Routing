@@ -6,8 +6,8 @@ use ReflectionClass;
 use ReflectionMethod;
 use Velsym\DependencyInjection\DependencyManager;
 use Velsym\Routing\Attributes\Route;
-use Velsym\Routing\Communication\Request;
-use Velsym\Routing\Communication\Response;
+use Velsym\Communication\Request;
+use Velsym\Communication\Response;
 
 class Router
 {

@@ -99,7 +99,7 @@ class Router
         exit;
     }
 
-    public function useHeaders(array $headers): void
+    private function useHeaders(array $headers): void
     {
         foreach ($headers as $header => $value) {
             header("$header: $value");
